@@ -1,20 +1,24 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+
 import './App.css'
 import data from './data'
+import Search from './components/Search';
+import Boxes from './components/Boxes';
+import References from './components/References';
+import Title from './components/Title';
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [filter, setFilter] = useState('');
+  const filteredLabels= data.filter(
+    ({ labelMessage,label }) =>label===Number(filter)
+     || labelMessage.toLowerCase().includes(filter.toLowerCase()) 
+  );
+  const handleChange=e=>setFilter(e.target.value)
   return (
-    <div className="App">
-      {data.map(({label,labelMessage})=>(
-        <div key={label}>
-            <p>Label {label} </p>
-            <p>{labelMessage}</p>
-        </div>
-      )
-      )}
-      <p>{`Joint Formulary Committee. British National Formulary (online) London: BMJ and Pharmaceutical Press <http://www.medicinescomplete.com> [Accessed on [22.6.23]]`}</p>
+    <div className="App flex-col">
+      <Title/>
+      <Search filter={filter} handleChange={handleChange}/>
+      <Boxes arr={filteredLabels}/>
+      <References/>
     </div>
   )
 }
